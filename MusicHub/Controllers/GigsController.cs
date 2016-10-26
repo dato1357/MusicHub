@@ -1,5 +1,7 @@
+using Microsoft.AspNet.Identity;
 using MusicHub.Models;
 using MusicHub.Models.ViewModels;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -15,6 +17,7 @@ namespace MusicHub.Controllers
         }
 
 
+        [Authorize]
         public ActionResult Create()
         {
             var viewModel = new GigFormViewModel
@@ -23,5 +26,25 @@ namespace MusicHub.Controllers
             };
             return View(viewModel);
         }
+
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Create(GigFormViewModel model)
+        {
+            var newGig = new Gig
+            {
+                Venue = model.Venue,
+                ArtistId = User.Identity.GetUserId(),
+                GenreId = model.Genre,
+                DateTime = DateTime.Parse($"{model.Date} {model.Time}")
+            };
+
+            _context.Gigs.Add(newGig);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
