@@ -1,7 +1,6 @@
 using Microsoft.AspNet.Identity;
 using MusicHub.Models;
 using MusicHub.Models.ViewModels;
-using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -37,7 +36,7 @@ namespace MusicHub.Controllers
                 Venue = model.Venue,
                 ArtistId = User.Identity.GetUserId(),
                 GenreId = model.Genre,
-                DateTime = DateTime.Parse($"{model.Date} {model.Time}")
+                DateTime = model.ToDateTime
             };
 
             _context.Gigs.Add(newGig);

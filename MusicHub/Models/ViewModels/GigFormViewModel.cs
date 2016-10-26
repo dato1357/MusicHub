@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 namespace MusicHub.Models.ViewModels
@@ -14,7 +15,6 @@ namespace MusicHub.Models.ViewModels
 
         public IEnumerable Genres { get; set; }
 
-
-
+        public DateTime ToDateTime => DateTime.Parse($"{Date} {Time}");
     }
 }

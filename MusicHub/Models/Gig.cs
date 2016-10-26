@@ -22,5 +22,8 @@ namespace MusicHub.Models
 
         [Required]
         public byte GenreId { get; set; }
+
+
+
     }
 }
