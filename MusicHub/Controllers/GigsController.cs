@@ -31,12 +31,18 @@ namespace MusicHub.Controllers
         [HttpPost]
         public ActionResult Create(GigFormViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                model.Genres = _context.Genres.ToList();
+                return View("Create", model);
+            }
+
             var newGig = new Gig
             {
                 Venue = model.Venue,
                 ArtistId = User.Identity.GetUserId(),
                 GenreId = model.Genre,
-                DateTime = model.ToDateTime
+                DateTime = model.ToDateTime()
             };
 
             _context.Gigs.Add(newGig);
