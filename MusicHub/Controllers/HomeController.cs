@@ -25,12 +25,13 @@ namespace MusicHub.Controllers
                 .Where(g => g.DateTime > DateTime.Now)
                 .ToList();
 
-            var viewModel = new HomeViewModel
+            var viewModel = new GigsViewModel
             {
                 UpcomingGigs = uppcomingigs,
-                ShowActions = User.Identity.IsAuthenticated
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Upcoming GIgs"
             };
-            return View(viewModel);
+            return View("Gigs", viewModel);
         }
 
         public ActionResult About()

@@ -1,6 +1,7 @@
 using Microsoft.AspNet.Identity;
 using MusicHub.Models;
 using MusicHub.Models.ViewModels;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -22,9 +23,18 @@ namespace MusicHub.Controllers
             var gigs = _context.Attendances
                 .Where(a => a.AttendeeId == userId)
                 .Select(a => a.Gig)
+                .Include(g => g.Genre)
+                .Include(g => g.Artist)
                 .ToList();
 
-            return View(gigs);
+            var gigsViewModel = new GigsViewModel
+            {
+                ShowActions = User.Identity.IsAuthenticated,
+                UpcomingGigs = gigs,
+                Heading = "Gigs I am Attending"
+            };
+
+            return View("Gigs", gigsViewModel);
         }
 
 
