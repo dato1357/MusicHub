@@ -1,4 +1,5 @@
 ﻿using MusicHub.Models;
+using MusicHub.Models.ViewModels;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -23,7 +24,13 @@ namespace MusicHub.Controllers
                 .Include(g => g.Genre)
                 .Where(g => g.DateTime > DateTime.Now)
                 .ToList();
-            return View(uppcomingigs);
+
+            var viewModel = new HomeViewModel
+            {
+                UpcomingGigs = uppcomingigs,
+                ShowActions = User.Identity.IsAuthenticated
+            };
+            return View(viewModel);
         }
 
         public ActionResult About()

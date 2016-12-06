@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicHub.Models.Gig>
+﻿@model MusicHub.Models.ViewModels.HomeViewModel
 
 @{
     ViewBag.Title = "Home Page";
@@ -6,7 +6,7 @@
 
 
 <ul class="gigs">
-    @foreach (var gig in Model)
+    @foreach (var gig in Model.UpcomingGigs)
     {
         <li>
             <div class="date">
@@ -19,12 +19,51 @@
             </div>
             <div class="details">
                 <span class="artist">
-                    @gig.Artist.Name
+                    @gig.Artist.Name @if (Model.ShowActions)
+                    {
+                        <button class="btn btn-link btn-sm js-toggle-follow" data-user-id="@gig.ArtistId">Follow</button>
+                    }
                 </span>
                 <span class="genre">
                     @gig.Genre.Name
                 </span>
-            </div>
-        </li>
-    }
-</ul>
+                @if (Model.ShowActions)
+                {
+                    <button data-gig-id="@gig.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going?</button>
+                }
+                </div>
+            </li>
+                }
+            </ul>
+
+                @section Scripts {
+                    <script>
+                        $(document).ready(function () {
+                            $(".js-toggle-attendance").click(function (e) {
+                                var button = $(e.target);
+                                $.post("/api/attendances", { GigId: button.attr("data-gig-id") })
+                                    .done(function () {
+                                        button
+                                            .removeClass("btn-default")
+                                            .addClass("btn-info")
+                                            .text("Going");
+                                    })
+                                    .fail(function () {
+                                        alert("Something went wrong");
+                                    });
+                            });
+
+                            $(".js-toggle-follow").click(function (e) {
+                                var button = $(e.target);
+                                $.post("/api/followings", { FolloweeId: button.attr("data-user-id") })
+                                    .done(function () {
+                                        button
+                                            .text("Following");
+                                    })
+                                    .fail(function () {
+                                        alert("Something went wrong");
+                                    });
+                            });
+                        });
+                    </script>
+                }
