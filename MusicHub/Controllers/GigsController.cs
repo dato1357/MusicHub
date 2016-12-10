@@ -1,6 +1,7 @@
 using Microsoft.AspNet.Identity;
 using MusicHub.Models;
 using MusicHub.Models.ViewModels;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,6 +16,20 @@ namespace MusicHub.Controllers
         {
             _context = new ApplicationDbContext();
         }
+
+
+        [Authorize]
+        public ActionResult Mine()
+        {
+            var userId = User.Identity.GetUserId();
+            var gigs = _context.Gigs
+                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now)
+                .Include(g => g.Genre)
+                .ToList();
+
+            return View(gigs);
+        }
+
 
         [Authorize]
         public ActionResult Attending()
@@ -35,6 +50,19 @@ namespace MusicHub.Controllers
             };
 
             return View("Gigs", gigsViewModel);
+        }
+
+        [Authorize]
+        public ActionResult Following()
+        {
+            var userId = User.Identity.GetUserId();
+            var following = _context.Followings
+                .Where(f => f.FollowerId == userId)
+                .Select(f => f.Followee)
+                .ToList();
+
+            return View(following);
+
         }
 
 
@@ -70,7 +98,7 @@ namespace MusicHub.Controllers
             _context.Gigs.Add(newGig);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Mine", "Gigs");
         }
 
     }
