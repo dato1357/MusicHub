@@ -4,7 +4,7 @@ using MusicHub.Models;
 using System.Linq;
 using System.Web.Http;
 
-namespace MusicHub.Controllers
+namespace MusicHub.Api
 {
     [Authorize]
     public class FollowingsController : ApiController

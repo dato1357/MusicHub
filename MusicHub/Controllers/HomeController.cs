@@ -22,7 +22,7 @@ namespace MusicHub.Controllers
             var uppcomingigs = _context.Gigs
                 .Include(g => g.Artist)
                 .Include(g => g.Genre)
-                .Where(g => g.DateTime > DateTime.Now)
+                .Where(g => g.DateTime > DateTime.Now && !g.IsCanceled)
                 .ToList();
 
             var viewModel = new GigsViewModel

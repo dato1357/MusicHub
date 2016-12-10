@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity;
 using MusicHub.DTOS;
 using MusicHub.Models;
 using System.Linq;
 using System.Web.Http;
 
-namespace MusicHub.Controllers
+namespace MusicHub.Api
 {
     [Authorize]
     public class AttendancesController : ApiController
