@@ -111,6 +111,7 @@ namespace MusicHub.Controllers
             var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == userId);
             var viewModel = new GigFormViewModel
             {
+                Id = gig.Id,
                 Genres = _context.Genres.ToList(),
                 Date = gig.DateTime.ToString("d MMM yyyy"),
                 Time = gig.DateTime.ToString("HH:mm"),
@@ -120,6 +121,28 @@ namespace MusicHub.Controllers
             };
             return View("GigForm", viewModel);
         }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Update(GigFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Genres = _context.Genres.ToList();
+                return View("GigForm", model);
+            }
+
+            var userId = User.Identity.GetUserId();
+            var gig = _context.Gigs.Single(g => g.Id == model.Id && g.ArtistId == userId);
+            gig.Venue = model.Venue;
+            gig.DateTime = model.ToDateTime();
+            gig.GenreId = model.Genre;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Mine", "Gigs");
+        }
+
 
 
 
