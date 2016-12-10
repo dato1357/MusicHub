@@ -1,12 +1,12 @@
 ﻿@model MusicHub.Models.ViewModels.GigFormViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = Model.Heading;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-<h2>Add a Gig</h2>
+<h2>@Model.Heading</h2>
 
 @using (Html.BeginForm("Create", "Gigs", FormMethod.Post))
 {

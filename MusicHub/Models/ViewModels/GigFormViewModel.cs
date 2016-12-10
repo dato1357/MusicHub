@@ -27,5 +27,7 @@ namespace MusicHub.Models.ViewModels
         {
             return DateTime.Parse($"{Date} {Time}");
         }
+
+        public string Heading { get; set; }
     }
 }
